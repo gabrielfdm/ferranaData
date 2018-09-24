@@ -1,0 +1,19 @@
+*.aux
+*.toc
+*.log
+*.pdf
+*.dvi
+*.fls
+*.fdb_latexmk
+*.gz
+*.ind
+*.ilg
+*.idx
+*.blg
+*.bbl
+*.lof
+*.lot
+*.png
+
+## Referências
+/referencias

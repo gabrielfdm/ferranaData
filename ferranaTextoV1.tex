@@ -1,0 +1,122 @@
+\documentclass[
+	article,			% indica que é um artigo acadêmico
+	11pt,				% tamanho da fonte
+	oneside,			% para impressão apenas no recto. Oposto a twoside
+	a4paper,			% tamanho do papel. 
+	english,			% idioma adicional para hifenização
+	brazil,				% o último idioma é o principal do documento
+	sumario=tradicional
+	]{abntex2}
+
+\usepackage{lmodern}			% Usa a fonte Latin Modern
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento 
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{nomencl} 			% Lista de simbolos
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{microtype} 			% para melhorias de justificação
+\usepackage{lipsum}				% para geração de dummy text
+\usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+
+
+\titulo{ferrana - Modelo Preditor para Eleições Proporcionais no Brasil}
+\autor{Gabriel  Melo e Matheus Pestana\thanks{Mestrandos em Ciência Política pelo IESP-UERJ.  E-mail: gabriel.melo@iesp.uerj.br e matheus.pestana@iesp.uerj.br}}
+\local{Brasil}
+\data{2018}
+
+\definecolor{blue}{RGB}{41,5,195}
+
+
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={\@author},
+    	pdfsubject={Modelo de artigo científico com abnTeX2},
+	    pdfcreator={LaTeX with abnTeX2},
+		pdfkeywords={abnt}{latex}{abntex}{abntex2}{atigo científico}, 
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=blue,          	% color of internal links
+    	citecolor=blue,        		% color of links to bibliography
+    	filecolor=magenta,      		% color of file links
+		urlcolor=blue,
+		bookmarksdepth=4
+}
+\makeatother
+
+\makeindex
+
+\setlrmarginsandblock{3cm}{3cm}{*}
+\setulmarginsandblock{3cm}{3cm}{*}
+\checkandfixthelayout
+
+\setlength{\parindent}{1.3cm}
+
+\setlength{\parskip}{0.2cm}  
+
+
+\SingleSpacing
+
+\begin{document}
+
+\selectlanguage{brazil}
+
+\frenchspacing 
+
+\maketitle
+
+
+\textual
+
+\section*{Introdução}
+
+O objetivo do trabalho consiste em construir um modelo estrutural capaz de prever a quantidade de votos e cadeiras que determinado partido obterá nas eleições proporcionais para a Câmara dos Deputados na eleições de 2018. A justificativa para a construção de um modelo estrutural é a ausência de pesquisas de opinião pública relativas à intenção de voto para a disputa de cadeiras na Câmara dos Deputados, que permitiriam um modelo agregado ou sintético. Observando as considerações de \citeonline{lewis2015forecasting} a partir do contexto europeu, no entanto, modelos estruturais ainda são considerados mais precisos.
+
+A coleta de dados se deu através do pacote ``electionsBR'' disponível no repositório da linguagem de programação R, que funciona como interface para o download direto do site do Tribunal Superior Eleitoral. Contamos, todavia, com dificuldades na captação dos dados para as eleições de 1945 a 1994, sendo necessárias modificações no código-fonte do pacota, a serem disponibilizadas posteriormente à comunidade. A dificuldade inicial no tratamento de nossa base de dados se deu pelo fato destes estarem codificados de maneira diferente em eleições anteriores a 1998, utilizando, por exemplo, unidades de análise geográficas distintas.
+
+As variáveis que optamos por utilizar por ora em nosso modelo estrutural são: partido, estado, ano da eleição, quantidade de votos nominais, quantidade de votos de legenda, quantidades de votos totais, desemprego no ano da eleição, IPCA agregado até setembro do ano da eleição e taxa de crescimento do PIB do ano anterior, variáveis macroeconômicas que satisfazem os requisitos para a construção de um modelo estrutural.
+
+\section*{Primeiros passos}
+
+A figura \ref{fig:cadeiras-partido}  apresenta a quantidade de cadeiras por partido desde as eleições de 1994. Selecionamos os quatro maiores partidos brasileiros do período posterior à redemocratização. Observamos que apenas PFL/DEM, PMDB e PSDB foram capazes ao longo deste período de conquistar 100 ou mais cadeiras, algo esperado em sistemas eleitorais proporcionais.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{CadeirasPartido.png}
+	\caption{Cadeiras por partido desde 1994.}
+	\label{fig:cadeiras-partido}
+\end{figure}
+
+Na figura \ref{fig:votos-nominais-partido} observamos a evolução dos votos em candidaturas pessoais ao longo do tempo. É possível observar a ausência de dados para o ano de 2002, o que se deve a um problema com a interface do TSE a ser corrigido para a próxima versão. Com os dados disponíveis, todavia, podemos verificar nos últimos anos a fragmentação da Câmara dos Deputados a partir da emergência de novos partidos, quadro observado em menor escala no Rio de Janeiro, como observado na figura \ref{fig:votos-partido-rio}, que mostra a ascensão do PMDB. 
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{RioVotosPartido.png}
+	\caption{Votos nominais no estado do Rio de Janeiro desde 1994.}
+	\label{fig:votos-partido-rio}
+\end{figure}
+
+A figura \ref{fig:votos-leg} demonstra a dominância de PT e PSDB como maiores receptores de voto de legenda, quadro que se mantém relativamente estável ao longo do tempo, com notável declínio do PSDB em 2002 e recuperação nas eleições seguintes, eventualmente superando o PT em 2014.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{VotosLegPartido.png}
+	\caption{Votos em legenda, por partido, desde 1994.}
+	\label{fig:votos-leg}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.5]{VotosNomPartido.png}
+	\caption{Votos nominais por partido desde 1994.}
+	\label{fig:votos-nominais-partido}
+\end{figure}
+
+\section*{Próximos passos}
+
+A etapa seguinte consistirá na junção do banco de dados com o período anterior às eleições de 1994. Adicionaremos também as variáveis econômicas para a construção do modelo preditor.
+
+\bibliography{referencias.bib}
+
+\end{document}
