@@ -45,7 +45,10 @@ ferranao <- ferranao %>%
                         ANO == 2014 ~ 0,
                         ANO == 1945 | ANO == 1947 ~ 0, #Como em 45 e 47 não teve copa, efeito 0 pra não influenciar
                         TRUE ~ as.numeric(Partido))) 
+<<<<<<< HEAD
 
 ferranao <- ferranao %>% 
   dplyr::rename(PARTIDO = Partido)
 
+=======
+>>>>>>> c3889229b082ce4e4a7d07cf6ab8bdff47a96c27
