@@ -49,3 +49,7 @@ ferranao <- ferranao %>%
 
 ferranao <- ferranao %>% 
   dplyr::rename(PARTIDO = Partido)
+
+
+
+
