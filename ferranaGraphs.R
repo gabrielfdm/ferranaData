@@ -2,15 +2,14 @@ library(ggplot2)
 library(tidyverse)
 library(plotly)
 
-
 ferranaT <- ferranao %>% 
-  group_by(ANO, PARTIDO) %>% 
-  summarise(NCADT = sum(NCAD)) %>% 
-  mutate(NCADT = NCADT)
+  group_by(ano, partido) %>% 
+  summarise(ncadt = sum(ncad)) %>% 
+  mutate(ncadt = ncadt)
 
 theme_set(theme_bw())
-ggCadAno <- ggplot(ferranaT, aes(x=ferranaT$ANO,  colour=PARTIDO)) +
-  geom_line(aes(y= ferranaT$NCADT)) +
+ggCadAno <- ggplot(ferranaT, aes(x=ferranaT$ano,  colour=partido)) +
+  geom_line(aes(y= ferranaT$ncadt)) +
   labs(title="Evolução do nº de cadeiras, por partido, na Câmara", 
        y="Nº de cadeiras", x="Ano da Eleição", 
        caption="Fonte: Tribunal Superior Eleitoral",
