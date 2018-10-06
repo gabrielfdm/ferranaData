@@ -36,12 +36,13 @@ ferranao <- ferranao %>%
 ferranao$partido <- as.factor(ferranao$partido)
 ferranao$UF <- as.factor(ferranao$UF)
 
+ferranao <- clean_names(ferranao)
 # Variável World Cup. O ideal seria botar o número de fases avançadas pelo Brasil,
 # mas nas fases de 50, 54, etc, não existiam oitavas, pelo número de participantes. 
 # Logo, o efeito ficaria alterado (já que um 4 em 50 equivaleria a um 5 em 2002, por exemplo).
 
 ferranao <- ferranao %>% 
-  mutate(WC = case_when(ano == 1950 ~ 1,
+  mutate(wc = case_when(ano == 1950 ~ 1,
                         ano == 1954 ~ 0,
                         ano == 1958 ~ 1,
                         ano == 1962 ~ 1,
@@ -61,8 +62,25 @@ ferranao <- ferranao %>%
                         ano == 1945 | ano == 1947 ~ 0, #Como em 45 e 47 não teve copa, efeito 0 pra não influenciar
                         TRUE ~ as.numeric(partido))) 
 
-ferranao <- clean_names(ferranao)
 
+
+ferranao <- ferranao %>% 
+  mutate(pib_aa = case_when(ano == 1994 ~ 4.7, ano == 1998 ~ 3.4,
+                            ano == 2002 ~ 1.3, ano == 2006 ~ 3.2,
+                            ano == 2010 ~ -0.6, ano == 2014 ~ 2.3,
+                            ano == 1990 ~ -4.3, ano == 1986 ~ 7.5,
+                            ano == 1982 ~ 0.8, ano == 1978 ~ 5,
+                            ano == 1974 ~ 8.2, ano == 1970 ~ 10.4,
+                            ano == 1966 ~ 6.7, ano == 1962 ~ 6.6,
+                            ano == 1958 ~ 10.8, ano == 1954 ~ 7.8,
+                            ano == 1950 ~ 6.8))
+
+ferranao <- ferranao %>% 
+  mutate(desemp = case_when(ano == 1982 ~ 6.7, ano == 1986 ~ 3.6,
+                            ano == 1990 ~ 4.3, ano == 1994 ~ 5.1,
+                            ano == 1998 ~ 7.6, ano == 2002 ~ 7.1,
+                            ano == 2006 ~ 10, ano == 2010 ~ 6.2, 
+                            ano == 2014 ~ 4.9))
 
 
 
