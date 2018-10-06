@@ -16,6 +16,8 @@ ferranaE <- ferranao %>%
                             ano == 1950 ~ 6.8))
 
 ferranaE <- ferranaE %>% 
-  mutate(desemp = case_when(ano == 1994 ~ 8.3, ano == 1998 ~ 11.1,
-                            ano == 2002 ~ 11.5, ano == 2006 ~ 10,
-                            ano == 2010 ~ 6.2, ano == 2014 ~ 4.9))
+  mutate(desemp = case_when(ano == 1982 ~ 6.7, ano == 1986 ~ 3.6,
+			    ano == 1990 ~ 4.3, ano == 1994 ~ 5.1,
+			    ano == 1998 ~ 7.6, ano == 2002 ~ 7.1,
+                            ano == 2006 ~ 10, ano == 2010 ~ 6.2, 
+			    ano == 2014 ~ 4.9))
