@@ -83,4 +83,16 @@ ferranao <- ferranao %>%
                             ano == 2014 ~ 4.9))
 
 
-
+ferranao <- ferranao %>%
+	mutate(govop = case_when(ano == 1990 & partido == "PRN" |
+				 partido == "PFL/DEM" ~ 1,
+			 	 ano == 1994 & partido == "PFL/DEM" |
+			         partido == "MDB" | partido == "PSDB" |
+				 partido == "PPB" ~ 1,
+			         ano == 1998 & partido == "PSDB" |
+				 partido == "PFL/DEM" | partido == "MDB" |
+				 partido == "PTB2" | partido == "PPB" ~ 1,
+			         ano == 2002 & partido == "PSDB" |
+				 partido == "MDB" | partido == "PPB" ~ 1,
+			         ano == 2006 & partido == "PT" | 
+			         partido == "PL" | partido == "PCDOB"
