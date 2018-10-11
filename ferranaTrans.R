@@ -95,4 +95,15 @@ ferranao <- ferranao %>%
 			         ano == 2002 & partido == "PSDB" |
 				 partido == "MDB" | partido == "PPB" ~ 1,
 			         ano == 2006 & partido == "PT" | 
-			         partido == "PL" | partido == "PCDOB"
+			         partido == "PL" | partido == "PCDOB" | 
+				   partido == "PSB" | partido == "PTB" | #Verificar PSB
+				   partido == "MDB" | partido == "PT" ~ 1, 
+				 ano == 2010 & partido == "PT" | partido == "PR" | #Verificar PR
+				 partido == "PCDOB" | partido == "PSB" | #Verificar PSB
+				   partido == "MDB" | patido == "PP" | 
+				   partido == "PDT" | partido == "PRB" ~ 1, 
+				 ano == 2014 & partido == "PT" | partido == "MDB" |
+				   partido == "PR" | partido == "PCDOB" | partido == "PDT" |
+				   partido == "PP" | partido == "PRB" ~ 1, 
+				TRUE ~ as.numeric(govop)))
+ 
