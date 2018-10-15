@@ -87,3 +87,40 @@ ggRio82
 ggplotly(ggRio82)
 
 
+###### GRÁFICOS PARA TEXTO V2 ######
+ferranaGmain <- ferrana %>% 
+  filter(partido == "PT" | partido == "MDB" | partido == "PFL/DEM" | partido == "PSDB")
+theme_set(theme_bw())
+ggCadAno <- ggplot(ferranaGmain, aes(x=ferranaGmain$ano,  colour=partido)) +
+  geom_line(aes(y= ferranaGmain$ncadt)) +
+  labs(title="Evolução do nº de cadeiras, por partido, na Câmara", 
+       y="Nº de cadeiras", x="Ano da Eleição", 
+       caption="Fonte: Tribunal Superior Eleitoral",
+       color="Partido") +
+  theme(plot.title=element_text(size=14, 
+                                hjust=0.5,
+                                lineheight=1.2)) +
+  scale_x_continuous(breaks=c(1990, 1994, 1998, 2002, 2006, 2010, 2014),
+                     limits=c(1990, 2014))
+ggCadAno
+
+
+coalizoes <- ferrana %>%
+  filter(govop == 1) %>% 
+  group_by(ano) %>% 
+  summarise(sizeCoalition = sum(ncadt))
+
+ggGovop <- ggplot(coalizoes, aes(x=coalizoes$ano)) +
+  geom_line(aes(y=coalizoes$sizeCoalition)) +
+  labs(title="Evolução do nº de cadeiras, por coalizão de governo, na Câmara", 
+       y="", x="", 
+       caption="Fonte: Tribunal Superior Eleitoral",
+       color="Partido") +
+  theme(plot.title=element_text(size=14, 
+                                hjust=0.5,
+                                lineheight=1.2)) +
+  scale_x_continuous(breaks=c(1990, 1994, 1998, 2002, 2006, 2010, 2014),
+                     limits=c(1990, 2014)) +
+  scale_y_continuous(limits = c(100, 400), breaks = c(100, 150, 200, 250, 300,
+                                                      350, 400))
+ggGovop

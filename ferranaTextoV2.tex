@@ -1,0 +1,219 @@
+\documentclass[
+	article,			% indica que é um artigo acadêmico
+	11pt,				% tamanho da fonte
+	oneside,			% para impressão apenas no recto. Oposto a twoside
+	a4paper,			% tamanho do papel. 
+	english,			% idioma adicional para hifenização
+	brazil,				% o último idioma é o principal do documento
+	sumario=tradicional
+	]{abntex2}
+
+\usepackage{lmodern}			% Usa a fonte Latin Modern
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento 
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\usepackage{nomencl} 			% Lista de simbolos
+\usepackage{color}				% Controle das cores
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{microtype} 			% para melhorias de justificação
+\usepackage{lipsum}				% para geração de dummy text
+\usepackage[alf]{abntex2cite}	% Citações padrão ABNT
+
+
+\titulo{ferrana - Modelo Preditor para Eleições Proporcionais no Brasil}
+\autor{Gabriel  Melo e Matheus Pestana\thanks{Mestrandos em Ciência Política pelo IESP-UERJ.  E-mail: gabriel.melo@iesp.uerj.br e matheus.pestana@iesp.uerj.br}}
+\local{Brasil}
+\data{2018}
+
+\definecolor{blue}{RGB}{41,5,195}
+
+
+\makeatletter
+\hypersetup{
+     	%pagebackref=true,
+		pdftitle={\@title}, 
+		pdfauthor={\@author},
+    	pdfsubject={Modelo de artigo científico com abnTeX2},
+	    pdfcreator={LaTeX with abnTeX2},
+		pdfkeywords={abnt}{latex}{abntex}{abntex2}{atigo científico}, 
+		colorlinks=true,       		% false: boxed links; true: colored links
+    	linkcolor=blue,          	% color of internal links
+    	citecolor=blue,        		% color of links to bibliography
+    	filecolor=magenta,      		% color of file links
+		urlcolor=blue,
+		bookmarksdepth=4
+}
+\makeatother
+
+\makeindex
+
+\setlrmarginsandblock{3cm}{3cm}{*}
+\setulmarginsandblock{3cm}{3cm}{*}
+\checkandfixthelayout
+
+\setlength{\parindent}{1.3cm}
+
+\setlength{\parskip}{0.2cm}  
+
+
+\SingleSpacing
+
+\begin{document}
+
+\selectlanguage{brazil}
+
+\frenchspacing 
+
+\maketitle
+
+
+\textual
+
+\section*{Introdução}
+
+O objetivo do trabalho consiste em construir um modelo estrutural capaz de prever a quantidade de votos e cadeiras que determinado partido obterá nas eleições proporcionais para a Câmara dos Deputados na eleições de 2018. A justificativa para a construção de um modelo estrutural é a ausência de pesquisas de opinião pública relativas à intenção de voto para a disputa de cadeiras na Câmara dos Deputados, que permitiriam um modelo agregado ou sintético. Observando as considerações de \citeonline{lewis2015forecasting} a partir do contexto europeu, no entanto, modelos estruturais ainda são considerados mais precisos.
+
+A coleta de dados se deu através do pacote ``electionsBR'' disponível no repositório da linguagem de programação R, que funciona como interface para o download direto do site do Tribunal Superior Eleitoral. Contamos, todavia, com dificuldades na captação dos dados para as eleições de 1945 a 1994, sendo necessárias modificações no código-fonte do pacote, a serem disponibilizadas posteriormente à comunidade. A dificuldade inicial no tratamento de nossa base de dados se deu pelo fato destes estarem codificados de maneira diferente em eleições anteriores a 1998, utilizando, por exemplo, unidades de análise geográficas distintas.
+
+Selecionamos 1990 por ser esta a primeira legislatura eleita após a promulgação da nova Constituição Federal e a primeira coalizão de um governo cujo Executivo foi escolhido pela população.
+
+As variáveis que optamos por utilizar por ora em nosso modelo estrutural são: partido, estado, ano da eleição, quantidade de cadeiras, desemprego no ano da eleição, taxa de crescimento do PIB do ano anterior e participação ou não na coalizão do governo à época das eleições, variáveis macroeconômicas e políticas que satisfazem os requisitos para a construção de um modelo estrutural.
+
+\section*{Primeiros passos}
+
+A figura \ref{fig:cadeiras-partido}  apresenta a quantidade de cadeiras por partido desde as eleições de 1990. Selecionamos os quatro maiores partidos brasileiros do período posterior à redemocratização. Observamos que apenas PFL/DEM, PMDB e PSDB foram capazes ao longo deste período de conquistar 100 ou mais cadeiras, algo esperado em sistemas eleitorais proporcionais. Observa-se também que tais partidos perdem espaço com a ascensão do número de cadeiras obtidas por outros partidos. 
+
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=1]{ggCadAnoPartido.png}
+	\caption{Cadeiras por partido desde 1990.}
+	\label{fig:cadeiras-partido}
+\end{figure}
+
+A figura \ref{fig:cadeiras-coal} apresenta quantidade de cadeiras pertencentes à coalizão dos governos a partir de 1990. Nota-se que os governos dos presidentes Itamar Franco e Fernando Henrique foram capazes de reunir em torno de si as maiores coalizões, o que talvez possa ser explicado pela menor fragmentação do Congresso Nacional na década de 1990.
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=1]{ggCadAnoCoal.png}
+	\caption{Cadeiras da coalizão de governo desde 1990.}
+	\label{fig:cadeiras-coal}
+\end{figure}
+
+\section*{Modelos}
+
+Para a elaboração dos modelos preditores, utilizamos \texttt{ncadt} como variável independente, representando o número de cadeiras do partido ou da coalizão de governo. Como variáveis dependentes, contamos com \texttt{desemp}, que é a média anual da taxa de desemprego em pontos percentuais; \texttt{pib\_aa}, que mede em pontos percentuais o crescimento do PIB no ano anterior e \texttt{govop}, variável \textit{dummy} que indica se o partido participa ou não do governo.
+
+O modelo da tabela \ref{ferrana1} considera como variáveis dependentes participação no govrno e taxa de crescimento do PIB no ano anterior. Percebemos que a variável \texttt{pib\_aa} apresenta baixa significância estatística, enquanto que \textbf{govop} aparenta ser o fator determinante. Contrariamente ao esperado, podemos observar que o número de cadeiras é afetado negativamente pela taxa de aumento do PIB.
+
+\begin{table}[!htbp] \centering 
+  \caption{PIB e coalizão de governo} 
+  \label{ferrana1} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Variável dependente:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & ncadt \\ 
+\hline \\[-1.8ex] 
+ pib\_aa & $-$0.254 \\ 
+  & (0.721) \\ 
+  & \\ 
+ govop & 38.050$^{***}$ \\ 
+  & (4.708) \\ 
+  & \\ 
+ Constant & 16.662$^{***}$ \\ 
+  & (2.415) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observações & 145 \\ 
+R$^{2}$ & 0.315 \\ 
+R Ajustado$^{2}$ & 0.305 \\ 
+Erro Padrão Residual & 23.480 (df = 142) \\ 
+Estatística F & 32.656$^{***}$ (df = 2; 142) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+O passo posterior foi testar isoladamente a segunda variável econômica do modelo, a taxa de desemprego. A tabela \ref{ferrana2} demonstra, no entanto, que quanto maior o desemprego, pior o desempenho da coalizão que ocupava o governo, o que corrobora, ainda que com baixa significância estatística, as hipóteses baseadas na teoria econômica do voto, na qual bons governos são recompensados a partir de uma análise retrospectiva da população acerca de sua situação econômica.
+
+No modelo da tabela \ref{ferrana3}, consideramos as três variáveis, demonstrando que a participação ou não no governo é a única variável explicativa relevante, o que nos leva interpretar que variáveis econômicas que definem o modelo estrutural não são capazes de prever a quantidade de cadeiras de partidos políticos ou mesmo de coalizões na Câmara dos Deputados.
+
+\begin{table}[tbp] \centering 
+  \caption{Desemprego e coalizão de governo} 
+  \label{ferrana2} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Variável dependente:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & ncadt \\ 
+\hline \\[-1.8ex] 
+ desemp & $-$0.038 \\ 
+  & (1.068) \\ 
+  & \\ 
+ govop & 37.972$^{***}$ \\ 
+  & (4.711) \\ 
+  & \\ 
+ Constant & 16.560$^{**}$ \\ 
+  & (7.134) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observações & 145 \\ 
+R$^{2}$ & 0.314 \\ 
+R Ajustado$^{2}$ & 0.305 \\ 
+Erro Padrão Residual & 23.491 (df = 142) \\ 
+Estatística F & 32.566$^{***}$ (df = 2; 142) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+\begin{table}[tbp] \centering 
+  \caption{PIB, desemprego e coalizão de governo} 
+  \label{ferrana3} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Variável dependente:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & ncadt \\ 
+\hline \\[-1.8ex] 
+ pib\_aa & $-$0.294 \\ 
+  & (0.795) \\ 
+  & \\ 
+ desemp & 0.142 \\ 
+  & (1.177) \\ 
+  & \\ 
+ govop & 38.030$^{***}$ \\ 
+  & (4.728) \\ 
+  & \\ 
+ Constant & 15.812$^{**}$ \\ 
+  & (7.436) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+Observações & 145 \\ 
+R$^{2}$ & 0.315 \\ 
+R Ajustado$^{2}$ & 0.301 \\ 
+Erro Padrão Residual & 23.562 (df = 141) \\ 
+Estatística F & 21.624$^{***}$ (df = 3; 141) \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+\section*{Reflexões e próximos passos}
+
+É possível acreditar que diversos fatores impedem a aplicação de um modelo estrutural, tal como previsto na literatura dominante nas eleições legislativas no Brasil. Analisando o funcionamento de modelos estruturais em perspectiva comparada, percebemos que nos países onde estes são aplicados, vigoram o sistema eleitoral majoritário ou misto. Um fator decorrente disso, como observado na Lei de Duverger, é a redução do número efetivo de partidos políticos, o que permite, a princípio, maior capacidade de responsabilização de governos  e seus aliados por parte do eleitorado.
+
+Outro fator relevante é a quantidade de eleições nos outros países, cujas democracias estão consolidadas, ao menos, desde a II Guerra Mundial. A estrutura do sistema partidário brasileiro foi consideravelmente afetada pela Ditadura Militar, que por decreto impôs um sistema bipartidarista artificial, cassou mandatos de representantes democraticamente eleitos e, dada sua natureza autoritária, inviabilizava a tomada do poder pela ``oposição consentida''. Isto torna inviável a utilização de dados deste período para a predição de eleições no contexto democrático atual.
+
+A próxima etapa desta pesquisa consiste na busca por novas variáveis não necessariamente econômicas que permitam aumentar a capacidade preditiva dos modelos e a imputação dos dados para as eleições de 2018 e a manutenção da dimensão governo x oposição, que apresentou resultados satisfatórios.
+
+\bibliography{referencias.bib}
+
+\end{document}
