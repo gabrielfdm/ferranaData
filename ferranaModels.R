@@ -2,15 +2,13 @@ library(tidyverse)
 library(plotly)
 library(janitor)
 
-ferranapt <- ferranao[which(ferranao$partido == "PT"),]
-ferranamdb <- ferranao[which(ferranao$partido == "MDB"),]
-
-
-mpt1 <- lm(ncad ~ pib_aa + desemp + wc, data = ferranapt)
-mpt2 <- lm(ncad ~ pib_aa * desemp, data = ferranapt)
-
-mmdb1 <- lm(ncad ~ pib_aa + desemp, data = ferranamdb)
-mmdb2 <- lm(ncad ~ pib_aa * desemp, data = ferranamdb)
-
-ferrana82 <- ferranao %>% 
-  filter(ano > 1982)
+mferrana0 <- lm(ncadt ~ pib_aa + desemp, data = ferrana)
+mferrana0.5 <- lm(ncadt ~ govop, data = ferrana)
+mferrana1 <- lm(ncadt ~ pib_aa + govop, data = ferrana)
+mferrana2 <- lm(ncadt ~ desemp + govop, data = ferrana)
+mferrana3 <- lm(ncadt ~ pib_aa + desemp + govop, data = ferrana)
+mferrana4 <- lm(nests ~ pib_aa + govop, data = ferrana)
+mferrana5 <- lm(nests ~ desemp + govop, data = ferrana)
+mferrana6 <- lm(nests ~ pib_aa + desemp + govop, data = ferrana)
+mferrana7 <- lm(ncadt ~ pib_aa * desemp + pib_aa + desemp + govop, data = ferrana)
+mferrana8 <- lm(nests ~ pib_aa * desemp + pib_aa + desemp + govop, data = ferrana)
