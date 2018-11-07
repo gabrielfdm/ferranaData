@@ -17,6 +17,8 @@
 *.csv
 *.xls
 *.xlsx
+*.zip
+*.Rdata
 
 ## Referências
 /referencias

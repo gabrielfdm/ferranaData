@@ -12,4 +12,4 @@ mferrana5 <- lm(nests ~ desemp + govop, data = ferrana)
 mferrana6 <- lm(nests ~ pib_aa + desemp + govop, data = ferrana)
 mferrana7 <- lm(ncadt ~ pib_aa * desemp + pib_aa + desemp + govop, data = ferrana)
 mferrana8 <- lm(nests ~ pib_aa * desemp + pib_aa + desemp + govop, data = ferrana)
-
+mferrana9 <- lm(ncadt ~wc * govop + pib_aa + desemp, data = ferrana)

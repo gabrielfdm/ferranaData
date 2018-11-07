@@ -97,3 +97,8 @@ ferranao <- rbind.fill(ferrana, ferrana02, ferrana06, ferrana14, ferrana2010,
 
 export(ferranao, "~/Documentos/ferranaData/ferranao.xlsx")
 
+deputados <- read.csv("deputados2018.csv",
+                      colClasses = c("numeric", "numeric", "numeric",
+                                     "numeric", "character", "numeric",
+                                     "integer", "numeric"), header = FALSE)
+names(deputados) <- names(ferrana)
