@@ -129,3 +129,9 @@ ferrana <- ferranao %>%
   summarise(nests = length(ncad), ncadt = sum(ncad)) %>% 
   mutate(nests = nests) %>%
   mutate(ncadt = ncadt)
+
+ferrana <- ferrana %>% 
+  mutate(pbpet = case_when(ano == 1990 ~ 24.51750, ano == 1994 ~ 17.18333,
+                            ano == 1998 ~ 14.41583, ano == 2002 ~ 26.11583,
+                            ano == 2006 ~ 66.05250, ano == 2010 ~ 79.40083,
+                            ano == 2014 ~ 93.13417, ano == 2018 ~ 62.17))
