@@ -161,7 +161,7 @@ ferrana <- ferrana %>%
 
 
 # Para inserir GovOp é preciso saber a coligação antes, e o governo ainda não está formado.
-ferrana %>%
+ferrana <- ferrana %>%
   mutate(govop = case_when(ano == 1990 & partido == "PRN" ~1,
                            ano == 1990 & partido == "PFL/DEM" ~ 1,
                            ano == 1994 & partido == "PFL/DEM" ~ 1,
@@ -198,7 +198,17 @@ ferrana %>%
                            ano == 2014 & partido == "PDT" ~1,
                            ano == 2014 & partido == "PP" ~1,
                            ano == 2014 & partido == "PRB" ~ 1,
-                           ano == 2018 & partido == ""
+                           ano == 2018 & partido == "PSL" ~ 1,
+                           ano == 2018 & partido == "PP" ~ 1,
+                           ano == 2018 & partido == "PSD" ~ 1,
+                           ano == 2018 & partido == "MDB" ~ 1,
+                           ano == 2018 & partido == "PR" ~ 1,
+                           ano == 2018 & partido == "PRB" ~ 1,
+                           ano == 2018 & partido == "PSDB" ~ 1,
+                           ano == 2018 & partido == "DEM" ~ 1,
+                           ano == 2018 & partido == "PTB" ~ 1,
+                           ano == 2018 & partido == "PSC" ~ 1,
+                           ano == 2018 & partido == "PMN" ~ 1,
                            TRUE ~ 0))
 
 # Criando situbi
@@ -209,4 +219,8 @@ ferrana <- ferrana %>%
 ferrana$situbi <- as.factor(ferrana$situbi)
 # Modelo Logit
 
-ferlogit <- glm(formula = situbi ~ pib_aa + desemp, family=binomial(link = "logit"), data = ferrana)
+ferlogit <- glm(formula = situbi ~ pib_aa + desemp + govop, family=binomial(link = "logit"), data = ferrana)
+
+# Rodando a anova
+
+anova(ferlogit, test="Chisq")
