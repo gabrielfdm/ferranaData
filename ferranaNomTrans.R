@@ -200,3 +200,13 @@ ferrana %>%
                            ano == 2014 & partido == "PRB" ~ 1,
                            ano == 2018 & partido == ""
                            TRUE ~ 0))
+
+# Criando situbi
+ferrana <- ferrana %>% 
+  mutate(situbi = case_when(situacao == "ELEITO" ~ 1, situacao == "ELEITO POR MEDIA" ~ 1,
+                            situacao == "ELEITO POR QP" ~ 1, situacao == "MEDIA" ~ 1,
+                            situacao == "NAO ELEITO" ~ 0, situacao == "SUPLENTE" ~ 0))
+ferrana$situbi <- as.factor(ferrana$situbi)
+# Modelo Logit
+
+ferlogit <- glm(formula = situbi ~ pib_aa + desemp, family=binomial(link = "logit"), data = ferrana)
